@@ -14,11 +14,53 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.category');
+        $data=Category::all();
+        return view('admin.category',compact('data'));
     }
-    public function manage_category()
+
+
+
+    public function manage_category($id='')
     {
-        return view('admin.manage_category');
+
+        if($id>0){
+            $result=Category::find($id);
+            $data['category_name']=$result->category_name;
+            $data['category_slug']=$result->category_slug;
+            $data['id']=$id;
+        }else{
+            $data['category_name']='';
+            $data['category_slug']='';
+            $data['id']=0;
+        }
+        return view('admin.manage_category',$data);
+    }
+    public function manage_category_process(Request $request)
+    {
+        $request->validate([
+            'category_name'=>'required',
+            'category_slug'=>'required|unique:categories,category_slug,'.$request->id,
+        ]);
+
+        if($request->id > 0){
+            $model=Category::find($request->id);
+            $msg='Category Updated';
+        }else{
+            $model=new Category;
+            $msg='Category Inserted';
+        }
+        $model->category_name=$request->category_name;
+        $model->category_slug=$request->category_slug;
+        $model->save();
+        $request->session()->flash('message',$msg);
+        return redirect('admin/category');
+    }
+
+    public function delete($id){
+        $data=Category::find($id);
+        $data->delete();
+        session()->flash('message','Category deleted');
+        return redirect()->back();
     }
 
     /**

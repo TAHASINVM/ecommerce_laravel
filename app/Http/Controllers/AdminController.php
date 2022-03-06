@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -14,7 +15,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.login');
+        if(session()->has('ADMIN_LOGIN')){
+            return redirect('admin/dashboard');
+        }else{
+            return view('admin.login');
+        }
     }
     public function auth(Request $request)
     {
@@ -37,6 +42,7 @@ class AdminController extends Controller
     {
         return view('admin.dashboard');
     }
+
 
 
 
