@@ -1,6 +1,6 @@
 @extends('admin/layout')
 @section('page_title','Manage Coupon')
-
+@section('coupon_select','active')
 @section('container')
     <h1>Manage Coupon</h1>
     <a href="{{ url('admin/coupon') }}"><button class="btn btn-success mt-3">Back</button></a>

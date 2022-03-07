@@ -51,6 +51,7 @@ class CategoryController extends Controller
         }
         $model->category_name=$request->category_name;
         $model->category_slug=$request->category_slug;
+        $model->status=1;
         $model->save();
         $request->session()->flash('message',$msg);
         return redirect('admin/category');
@@ -62,5 +63,13 @@ class CategoryController extends Controller
         session()->flash('message','Category deleted');
         return redirect()->back();
     }
+    public function status($status,$id){
+        $data=Category::find($id);
+        $data->status=$status;
+        $data->save();
+        session()->flash('message','Status Updated');
+        return redirect()->back();
+    }
+
 
 }

@@ -1,5 +1,6 @@
 @extends('admin/layout')
 @section('page_title','Category')
+@section('category_select','active')
 @section('container')
     {{ session('message') }}
     <h1>Category</h1>
@@ -24,8 +25,13 @@
                                 <td>{{ $item->category_name }}</td>
                                 <td>{{ $item->category_slug }}</td>
                                 <td>
-                                    <a href="{{ url('admin/category/delete',$item->id) }}" class="btn btn-danger">Delete</a>
                                     <a href="{{ url('admin/category/manage_category',$item->id) }}" class="btn btn-success">Edit</a>
+                                    @if ($item->status==1)
+                                        <a href="{{ url('admin/category/status/0',$item->id) }}" class="btn btn-primary">Active</a>
+                                    @elseif ($item->status==0)
+                                        <a href="{{ url('admin/category/status/1',$item->id) }}" class="btn btn-warning">Deactive</a>
+                                    @endif
+                                    <a href="{{ url('admin/category/delete',$item->id) }}" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                         @endforeach 
