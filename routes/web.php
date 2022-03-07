@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ColorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,17 +38,24 @@ Route::group(['middleware'=>'admin_auth'],function(){
 
     Route::get('admin/coupon',[CouponController::class,'index']);
     Route::get('admin/coupon/manage_coupon',[CouponController::class,'manage_coupon']);
-    Route::post('admin/category/manage_coupon_process',[CouponController::class,'manage_coupon_process'])->name('coupon.manage_coupon_process');
+    Route::post('admin/coupon/manage_coupon_process',[CouponController::class,'manage_coupon_process'])->name('coupon.manage_coupon_process');
     Route::get('admin/coupon/delete/{id}',[CouponController::class,'delete']);
     Route::get('admin/coupon/status/{status}/{id}',[CouponController::class,'status']);
     Route::get('admin/coupon/manage_coupon/{id}',[CouponController::class,'manage_coupon']);
 
     Route::get('admin/size',[SizeController::class,'index']);
     Route::get('admin/size/manage_size',[SizeController::class,'manage_size']);
-    Route::post('admin/category/manage_size_process',[SizeController::class,'manage_size_process'])->name('size.manage_size_process');
+    Route::post('admin/size/manage_size_process',[SizeController::class,'manage_size_process'])->name('size.manage_size_process');
     Route::get('admin/size/delete/{id}',[SizeController::class,'delete']);
     Route::get('admin/size/status/{status}/{id}',[SizeController::class,'status']);
     Route::get('admin/size/manage_size/{id}',[SizeController::class,'manage_size']);
+
+    Route::get('admin/color',[ColorController::class,'index']);
+    Route::get('admin/color/manage_color',[ColorController::class,'manage_color']);
+    Route::post('admin/color/manage_color_process',[ColorController::class,'manage_color_process'])->name('color.manage_color_process');
+    Route::get('admin/color/delete/{id}',[ColorController::class,'delete']);
+    Route::get('admin/color/status/{status}/{id}',[ColorController::class,'status']);
+    Route::get('admin/color/manage_color/{id}',[ColorController::class,'manage_color']);
 
     Route::get('admin/logout', function () {
         session()->forget('ADMIN_LOGIN');
