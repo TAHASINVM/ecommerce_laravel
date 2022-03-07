@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Dashboard</title>
+    <title>@yield('page_title')</title>
 
     <link href="{{ asset('admin_assets/css/font-face.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin_assets/vendor/font-awesome-4.7/css/font-awesome.min.css') }}" rel="stylesheet" media="all">
@@ -68,6 +68,10 @@
                             <a href="{{ url('admin/category') }}">
                                 <i class="fas fa-tachometer-alt"></i>Category</a>
                         </li>
+                        <li>
+                            <a href="{{ url('admin/coupon') }}">
+                                <i class="fas fa-tachometer-alt"></i>Coupon</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -116,8 +120,7 @@
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         @section('container')
-                        @show
-                        
+                        @show   
                     </div>
                 </div>
             </div>

@@ -1,9 +1,9 @@
 @extends('admin/layout')
-@section('page_title','Category')
+@section('page_title','Coupon')
 @section('container')
     {{ session('message') }}
-    <h1>Category</h1>
-    <a href="category/manage_category"><button class="btn btn-success my-3">Add Category</button></a>
+    <h1>Coupon</h1>
+    <a href="{{ url('admin/coupon/manage_coupon') }}"><button class="btn btn-success my-3">Add Coupon</button></a>
     <div class="row">
         <div class="col-md-12">
             <!-- DATA TABLE-->
@@ -12,8 +12,9 @@
                     <thead>
                         <tr>
                             <th>S.no</th>
-                            <th>Category Name</th>
-                            <th>Category Slug</th>
+                            <th>Title</th>
+                            <th>Code</th>
+                            <th>Value</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -21,11 +22,12 @@
                         @foreach ($data as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
-                                <td>{{ $item->category_name }}</td>
-                                <td>{{ $item->category_slug }}</td>
+                                <td>{{ $item->title }}</td>
+                                <td>{{ $item->code }}</td>
+                                <td>{{ $item->value }}</td>
                                 <td>
-                                    <a href="{{ url('admin/category/delete',$item->id) }}" class="btn btn-danger">Delete</a>
-                                    <a href="{{ url('admin/category/manage_category',$item->id) }}" class="btn btn-success">Edit</a>
+                                    <a href="{{ url('admin/coupon/delete',$item->id) }}" class="btn btn-danger">Delete</a>
+                                    <a href="{{ url('admin/coupon/manage_coupon',$item->id) }}" class="btn btn-success">Edit</a>
                                 </td>
                             </tr>
                         @endforeach 
