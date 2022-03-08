@@ -23,6 +23,7 @@
                             <th>S.no</th>
                             <th>Name</th>
                             <th>Slug</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -32,6 +33,10 @@
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->slug }}</td>
+                                <td>
+                                    @if ($item->image!='')
+                                        <img width="100px" src="{{ asset('storage/media/'.$item->image) }}" alt=""></td>
+                                    @endif
                                 <td>
                                     <a href="{{ url('admin/product/manage_product',$item->id) }}" class="btn btn-success">Edit</a>
                                     @if ($item->status==1)

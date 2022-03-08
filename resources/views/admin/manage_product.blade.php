@@ -2,13 +2,21 @@
 @section('page_title','Manage Product')
 @section('product_select','active')
 @section('container')
+
+    @if ($id>0)
+        {{ $image_required="" }}
+    @else
+        {{ $image_required="required" }}
+    @endif
+
+
     <h1>Manage Product</h1>
     <a href="{{ url('admin/product') }}"><button class="btn btn-success mt-3">Back</button></a>
     <div class="row m-t-30">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('product.manage_product_process') }}" method="post">
+                    <form action="{{ route('product.manage_product_process') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="name" class="control-label mb-1">Product</label>
@@ -30,7 +38,12 @@
                         </div>
                         <div class="form-group">
                             <label for="image" class="control-label mb-1">Slug</label>
-                            <input id="image" value="{{ $image }}" name="image" type="file" class="form-control" aria-required="true" aria-invalid="false" required>
+                            <input id="image" value="{{ $image }}" name="image" type="file" class="form-control" aria-required="true" aria-invalid="false" {{ $image_required }}>
+                            @error('image')
+                                <div class="alert alert-danger text-center mt-2" role="alert">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="category_id" class="control-label mb-1">Category</label>

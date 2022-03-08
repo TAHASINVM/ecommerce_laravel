@@ -62,8 +62,15 @@ class ProductController extends Controller
     }
     public function manage_product_process(Request $request)
     {
+
+        if($request->id > 0){
+            $image_validation='mimes:jpeg,jpg,png';
+        }else{
+            $image_validation='required|mimes:jpeg,jpg,png';
+        }
         $request->validate([
             'name'=>'required',
+            'image'=>$image_validation,
             'slug'=>'required|unique:products,slug,'.$request->id,
         ]);
 
@@ -74,9 +81,17 @@ class ProductController extends Controller
             $model=new Product;
             $msg='Product Inserted';
         }
+
+        if($request->hasfile('image')){
+            $image=$request->file('image');
+            $ext=$image->extension();
+            $image_names=time().'.'.$ext;
+            $image->storeAs('/public/media',$image_names);
+            $model->image=$image_names;
+        }
+
         $model->category_id=$request->category_id;
         $model->name=$request->name;
-        $model->image=$request->image;
         $model->slug=$request->slug;
         $model->brand=$request->brand;
         $model->model=$request->model;
