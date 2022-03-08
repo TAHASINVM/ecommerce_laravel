@@ -2,7 +2,16 @@
 @section('page_title','Size')
 @section('size_select','active')
 @section('container')
-    {{ session('message') }}
+
+    @if (session()->has('message'))
+        <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+            {{ session('message') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>x</span>
+            </button>
+        </div>
+    @endif     
+    
     <h1>Size</h1>
     <a href="size/manage_size"><button class="btn btn-success my-3">Add Size</button></a>
     <div class="row">

@@ -2,7 +2,15 @@
 @section('page_title','Category')
 @section('category_select','active')
 @section('container')
-    {{ session('message') }}
+
+    @if (session()->has('message'))
+        <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+            {{ session('message') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>x</span>
+            </button>
+        </div>
+    @endif
     <h1>Category</h1>
     <a href="category/manage_category"><button class="btn btn-success my-3">Add Category</button></a>
     <div class="row">

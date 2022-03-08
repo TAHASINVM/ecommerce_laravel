@@ -1,6 +1,6 @@
 @extends('admin/layout')
-@section('page_title','Color')
-@section('color_select','active')
+@section('page_title','Product')
+@section('product_select','active')
 @section('container')
 
     @if (session()->has('message'))
@@ -10,10 +10,9 @@
                 <span>x</span>
             </button>
         </div>
-    @endif  
-      
-    <h1>Size</h1>
-    <a href="color/manage_color"><button class="btn btn-success my-3">Add Color</button></a>
+    @endif
+    <h1>Products</h1>
+    <a href="{{ url('admin/product/manage_product') }}"><button class="btn btn-success my-3">Add Product</button></a>
     <div class="row">
         <div class="col-md-12">
             <!-- DATA TABLE-->
@@ -22,7 +21,8 @@
                     <thead>
                         <tr>
                             <th>S.no</th>
-                            <th>Color</th>
+                            <th>Name</th>
+                            <th>Slug</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -30,15 +30,16 @@
                         @foreach ($data as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
-                                <td>{{ $item->color }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td>{{ $item->slug }}</td>
                                 <td>
-                                    <a href="{{ url('admin/color/manage_color',$item->id) }}" class="btn btn-success">Edit</a>
+                                    <a href="{{ url('admin/product/manage_product',$item->id) }}" class="btn btn-success">Edit</a>
                                     @if ($item->status==1)
-                                        <a href="{{ url('admin/color/status/0',$item->id) }}" class="btn btn-primary">Active</a>
+                                        <a href="{{ url('admin/product/status/0',$item->id) }}" class="btn btn-primary">Active</a>
                                     @elseif ($item->status==0)
-                                        <a href="{{ url('admin/color/status/1',$item->id) }}" class="btn btn-warning">Deactive</a>
+                                        <a href="{{ url('admin/product/status/1',$item->id) }}" class="btn btn-warning">Deactive</a>
                                     @endif
-                                    <a href="{{ url('admin/color/delete',$item->id) }}" class="btn btn-danger">Delete</a>
+                                    <a href="{{ url('admin/product/delete',$item->id) }}" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                         @endforeach 
