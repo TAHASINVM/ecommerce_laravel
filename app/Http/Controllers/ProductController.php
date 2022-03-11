@@ -23,7 +23,6 @@ class ProductController extends Controller
 
     public function manage_product($id='')
     {
-
         if($id>0){
             $result=Product::find($id);
             $data['category_id']=$result->category_id;
@@ -40,6 +39,16 @@ class ProductController extends Controller
             $data['warranty']=$result->warranty;
             $data['status']=$result->status;
             $data['id']=$id;
+
+            $data['productAttrArr']=DB::table('product_attr')->where(['product_id'=>$id])->get();
+            $productImagesArr=DB::table('product_images')->where(['product_id'=>$id])->get();
+
+            if(!isset($productImagesArr[0])){
+                $data['productImagesArr'][0]['id']="";
+                $data['productImagesArr'][0]['images']="";
+            }else{
+                $data['productImagesArr']=$productImagesArr;
+            }
         }else{
             $data['category_id']='';
             $data['name']='';
@@ -55,9 +64,23 @@ class ProductController extends Controller
             $data['warranty']='';
             $data['status']='';
             $data['id']=0;
+
+            
+            $data['productAttrArr'][0]['id']="";
+            $data['productAttrArr'][0]['product_id']="";
+            $data['productAttrArr'][0]['sku']="";
+            $data['productAttrArr'][0]['attr_image']="";
+            $data['productAttrArr'][0]['mrp']="";
+            $data['productAttrArr'][0]['price']="";
+            $data['productAttrArr'][0]['qty']="";
+            $data['productAttrArr'][0]['size_id']="";
+            $data['productAttrArr'][0]['color_id']="";
+            
         }
 
         $data['category']=DB::table('categories')->where(['status'=>1])->get();
+        $data['size']=DB::table('sizes')->where(['status'=>1])->get();
+        $data['color']=DB::table('colors')->where(['status'=>1])->get();
         return view('admin.manage_product',$data);
     }
     public function manage_product_process(Request $request)
@@ -72,7 +95,31 @@ class ProductController extends Controller
             'name'=>'required',
             'image'=>$image_validation,
             'slug'=>'required|unique:products,slug,'.$request->id,
+            'attr_image.*' => 'mimes:png,jpg,jpeg',
+            'images.*' => 'mimes:png,jpg,jpeg'
         ]);
+
+
+
+        $paidArr=$request->paid;
+        $skuArr=$request->sku;
+        $mrpArr=$request->mrp;
+        $priceArr=$request->price;
+        $qtyArr=$request->qty;
+        $size_idArr=$request->size_id;
+        $color_idArr=$request->color_id;
+        foreach($skuArr as $key=>$val){
+            $check=DB::table('product_attr')
+            ->where('sku','=',$skuArr[$key])
+            ->where('id','!=',$paidArr[$key])
+            ->get();
+
+            if(isset($check[0])){
+                $request->session()->flash('sku_error',$skuArr[$key].'SKU already used');
+                return redirect()->back();
+            }
+        }
+
 
         if($request->id > 0){
             $model=Product::find($request->id);
@@ -103,6 +150,75 @@ class ProductController extends Controller
         $model->warranty=$request->warranty;
         $model->status=1;
         $model->save();
+        $pdi=$model->id;
+
+        /*Product attr start*/
+
+
+
+        foreach($skuArr as $key=>$val){
+            $productAttrArr['product_id']=$pdi;
+            $productAttrArr['sku']=$skuArr[$key];
+            $productAttrArr['mrp']=$mrpArr[$key];
+            $productAttrArr['price']=$priceArr[$key];
+            $productAttrArr['qty']=$qtyArr[$key];
+            if($size_idArr[$key]==''){
+                $productAttrArr['size_id']=0;
+            }else{
+                $productAttrArr['size_id']=$size_idArr[$key];
+            }
+            if($color_idArr[$key]==''){
+                $productAttrArr['color_id']=0;
+            }else{
+                $productAttrArr['color_id']=$color_idArr[$key];
+            }
+
+            if($request->hasFile("attr_image.$key")){
+                $rand=rand('111111111','999999999');
+                $attr_image=$request->file("attr_image.$key");
+                $ext=$attr_image->extension();
+                $image_name=$rand.'.'.$ext;
+                $attr_image->storeAs('/public/media',$image_name);
+                $productAttrArr['attr_image']=$image_name;
+            }
+
+
+            if($paidArr[$key]!=''){
+                DB::table('product_attr')->where(['id'=>$paidArr[$key]])->update($productAttrArr);
+            }else{
+                DB::table('product_attr')->insert($productAttrArr);
+            }
+        }
+        
+        
+        /*Product attr end*/
+
+
+        /*Product Images Start */
+
+        $piidArr=$request->piid;
+        foreach($piidArr as $key=>$val){
+            $productImageArr['product_id']=$pdi;
+            if($request->hasFile("images.$key")){
+                $rand=rand('111111111','999999999');
+                $images=$request->file("images.$key");
+                $ext=$images->extension();
+                $image_name=$rand.'.'.$ext;
+                $images->storeAs('/public/media',$image_name);
+                $productImageArr['images']=$image_name;
+            }
+
+
+            if($piidArr[$key]!=''){
+                DB::table('product_images')->where(['id'=>$piidArr[$key]])->update($productImageArr);
+            }else{
+                DB::table('product_images')->insert($productImageArr);
+            }
+        }
+
+
+        /*Product Images End */
+
         $request->session()->flash('message',$msg);
         return redirect('admin/product');
     }
@@ -112,6 +228,14 @@ class ProductController extends Controller
         $data->delete();
         session()->flash('message','Product deleted');
         return redirect('admin/product');
+    }
+    public function product_attr_delete($paid,$pid){
+        DB::table('product_attr')->where(['id'=>$paid])->delete();
+        return redirect('admin/product/manage_product/'.$pid);
+    }
+    public function product_images_delete($piid,$pid){
+        DB::table('product_images')->where(['id'=>$piid])->delete();
+        return redirect('admin/product/manage_product/'.$pid);
     }
     public function status($status,$id){
         $data=Product::find($id);
