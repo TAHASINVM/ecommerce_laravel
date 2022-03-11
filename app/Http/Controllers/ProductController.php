@@ -75,12 +75,16 @@ class ProductController extends Controller
             $data['productAttrArr'][0]['qty']="";
             $data['productAttrArr'][0]['size_id']="";
             $data['productAttrArr'][0]['color_id']="";
+
+            $data['productImagesArr'][0]['id']="";
+            $data['productImagesArr'][0]['images']="";
             
         }
 
         $data['category']=DB::table('categories')->where(['status'=>1])->get();
         $data['size']=DB::table('sizes')->where(['status'=>1])->get();
         $data['color']=DB::table('colors')->where(['status'=>1])->get();
+        $data['brands']=DB::table('brands')->where(['status'=>1])->get();
         return view('admin.manage_product',$data);
     }
     public function manage_product_process(Request $request)
@@ -159,9 +163,9 @@ class ProductController extends Controller
         foreach($skuArr as $key=>$val){
             $productAttrArr['product_id']=$pdi;
             $productAttrArr['sku']=$skuArr[$key];
-            $productAttrArr['mrp']=$mrpArr[$key];
-            $productAttrArr['price']=$priceArr[$key];
-            $productAttrArr['qty']=$qtyArr[$key];
+            $productAttrArr['mrp']=(int)$mrpArr[$key];
+            $productAttrArr['price']=(int)$priceArr[$key];
+            $productAttrArr['qty']=(int)$qtyArr[$key];
             if($size_idArr[$key]==''){
                 $productAttrArr['size_id']=0;
             }else{
@@ -198,22 +202,26 @@ class ProductController extends Controller
 
         $piidArr=$request->piid;
         foreach($piidArr as $key=>$val){
-            $productImageArr['product_id']=$pdi;
+            $productImagesArr['product_id']=$pdi;
             if($request->hasFile("images.$key")){
                 $rand=rand('111111111','999999999');
                 $images=$request->file("images.$key");
                 $ext=$images->extension();
                 $image_name=$rand.'.'.$ext;
                 $images->storeAs('/public/media',$image_name);
-                $productImageArr['images']=$image_name;
+                $productImagesArr['images']=$image_name;
+
+
+
+                
+                if($piidArr[$key]!=''){
+                    DB::table('product_images')->where(['id'=>$piidArr[$key]])->update($productImagesArr);
+                }else{
+                    DB::table('product_images')->insert($productImagesArr);
+                }
             }
 
 
-            if($piidArr[$key]!=''){
-                DB::table('product_images')->where(['id'=>$piidArr[$key]])->update($productImageArr);
-            }else{
-                DB::table('product_images')->insert($productImageArr);
-            }
         }
 
 

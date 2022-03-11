@@ -81,7 +81,17 @@
                                         </div>
                                         <div class="col-4">
                                             <label for="brand" class="control-label mb-1">Brand</label>
-                                            <input id="brand" value="{{ $brand }}" name="brand" type="text" class="form-control" aria-required="true" aria-invalid="false" required>        
+                                            <select  id="brand" value="{{ $brand }}" name="brand" class="form-control" aria-required="true" aria-invalid="false" required>
+                                                <option value="">Select Brand</option>
+                                                @foreach ($brands as $item)
+                                                    @if ($brand==$item->id)
+                                                        <option selected value="{{ $item->id }}"> 
+                                                    @else
+                                                        <option value="{{ $item->id }}"> 
+                                                    @endif
+                                                    {{ $item->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="col-4">
                                             <label for="model" class="control-label mb-1">Model</label>
