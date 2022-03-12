@@ -28,11 +28,17 @@ class CouponController extends Controller
             $data['title']=$result->title;
             $data['code']=$result->code;
             $data['value']=$result->value;
+            $data['type']=$result->type;
+            $data['min_order_amt']=$result->min_order_amt;
+            $data['is_one_time']=$result->is_one_time;
             $data['id']=$id;
         }else{
             $data['title']='';
             $data['code']='';
             $data['value']='';
+            $data['type']='';
+            $data['min_order_amt']='';
+            $data['is_one_time']='';
             $data['id']=0;
         }
         return view('admin.manage_coupon',$data);
@@ -51,10 +57,14 @@ class CouponController extends Controller
         }else{
             $model=new Coupon;
             $msg='Coupon Inserted';
+            $model->status=1;
         }
         $model->title=$request->title;
         $model->code=$request->code;
         $model->value=$request->value;
+        $model->type=$request->type;
+        $model->min_order_amt=$request->min_order_amt;
+        $model->is_one_time=$request->is_one_time;
         $model->save();
         $request->session()->flash('message',$msg);
         return redirect('admin/coupon');

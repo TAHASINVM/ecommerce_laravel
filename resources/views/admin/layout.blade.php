@@ -88,6 +88,10 @@
                             <a href="{{ url('admin/product') }}">
                                 <i class="fas fa-product-hunt"></i>Product</a>
                         </li>
+                        <li class="@yield('tax_select')">
+                            <a href="{{ url('admin/tax') }}">
+                                <i class="fas fa-product-hunt"></i>Tax</a>
+                        </li>
                     </ul>
                 </nav>
             </div>

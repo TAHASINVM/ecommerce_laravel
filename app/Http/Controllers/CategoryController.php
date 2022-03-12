@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Storage;
+
+
 
 class CategoryController extends Controller
 {
@@ -27,18 +31,28 @@ class CategoryController extends Controller
             $result=Category::find($id);
             $data['category_name']=$result->category_name;
             $data['category_slug']=$result->category_slug;
+            $data['parent_category_id']=$result->parent_category_id;
+            $data['category_image']=$result->category_image;
             $data['id']=$id;
+            $data['category']=DB::table('categories')->where(['status'=>1])->where('id','!=',$id)->get();
+
         }else{
             $data['category_name']='';
             $data['category_slug']='';
+            $data['parent_category_id']="";
+            $data['category_image']="";
             $data['id']=0;
+            $data['category']=DB::table('categories')->where(['status'=>1])->get();
+
         }
+
         return view('admin.manage_category',$data);
     }
     public function manage_category_process(Request $request)
     {
         $request->validate([
             'category_name'=>'required',
+            'category_image'=>'mimes:png,jpg,jpeg',
             'category_slug'=>'required|unique:categories,category_slug,'.$request->id,
         ]);
 
@@ -51,6 +65,24 @@ class CategoryController extends Controller
         }
         $model->category_name=$request->category_name;
         $model->category_slug=$request->category_slug;
+        $model->parent_category_id=$request->parent_category_id;
+
+        if($request->hasfile('category_image')){
+
+            if($request->id > 0){
+                $arrImage=DB::table('categories')->where(['id'=>$request->id])->get();
+                if( Storage::exists('/public/media/category/'.$arrImage[0]->category_image)){
+                    Storage::delete('/public/media/category/'.$arrImage[0]->category_image);
+                }
+            }
+
+            $image=$request->file('category_image');
+            $ext=$image->extension();
+            $image_name=time().'.'.$ext;
+            $image->storeAs('/public/media/category',$image_name);
+            $model->category_image=$image_name;
+        }
+
         $model->status=1;
         $model->save();
         $request->session()->flash('message',$msg);

@@ -28,6 +28,7 @@
         </div>   
     @enderror
     <a href="{{ url('admin/product') }}"><button class="btn btn-success mt-3">Back</button></a>
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
     <div class="row m-t-30">
         <div class="col-md-12">
             <form action="{{ route('product.manage_product_process') }}" method="post" enctype="multipart/form-data">
@@ -57,6 +58,9 @@
                                 <div class="form-group">
                                     <label for="image" class="control-label mb-1">Image</label>
                                     <input id="image" value="{{ $image }}" name="image" type="file" class="form-control" aria-required="true" aria-invalid="false" {{ $image_required }}>
+                                    @if ( $image!='')
+                                        <a href="{{ asset('storage/media/'.$image) }}" target="_blank"><img width="100px" src="{{ asset('storage/media/'.$image) }}" alt=""></a>
+                                    @endif
                                     @error('image')
                                         <div class="alert alert-danger text-center mt-2" role="alert">
                                             {{ $message }}
@@ -123,6 +127,81 @@
                                     <label for="warranty" class="control-label mb-1">Warranty</label>
                                     <textarea id="warranty" name="warranty" class="form-control" aria-required="true" aria-invalid="false" required>{{ $warranty }}</textarea>
                                 </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="lead_time" class="control-label mb-1">Lead Time</label>
+                                            <input id="lead_time" value="{{ $lead_time }}" name="lead_time" type="text" class="form-control" aria-required="true" aria-invalid="false">        
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label for="tax_id" class="control-label mb-1">Tax</label>
+                                            <select  id="tax_id" value="{{ $tax_id }}" name="tax_id" class="form-control" aria-required="true" aria-invalid="false" required>
+                                                <option value="">Select Tax</option>
+                                                @foreach ($taxs as $item)
+                                                    @if ($tax_id==$item->id)
+                                                        <option selected value="{{ $item->id }}"> 
+                                                    @else
+                                                        <option value="{{ $item->id }}"> 
+                                                    @endif
+                                                    {{ $item->tax_desc }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                              </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="is_promo" class="control-label mb-1">is promo</label>
+                                            <select  id="is_promo" value="{{ $is_promo }}" name="is_promo" class="form-control" aria-required="true" aria-invalid="false" required>
+                                                @if ($is_promo=='1')
+                                                    <option value="1" selected>Yes</option>  
+                                                    <option value="0">No</option>
+                                                @else
+                                                    <option value="1">Yes</option>  
+                                                    <option value="0" selected>No</option>
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="is_featured" class="control-label mb-1">Is Featured</label>
+                                            <select  id="is_featured" value="{{ $is_featured }}" name="is_featured" class="form-control" aria-required="true" aria-invalid="false" required>
+                                                @if ($is_featured=='1')
+                                                    <option value="1" selected>Yes</option>  
+                                                    <option value="0">No</option>
+                                                @else
+                                                    <option value="1">Yes</option>  
+                                                    <option value="0" selected>No</option>
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="is_discounted" class="control-label mb-1">Is Discounted</label>
+                                            <select  id="is_discounted" value="{{ $is_discounted }}" name="is_discounted" class="form-control" aria-required="true" aria-invalid="false" required>
+                                                @if ($is_discounted=='1')
+                                                    <option value="1" selected>Yes</option>  
+                                                    <option value="0">No</option>
+                                                @else
+                                                    <option value="1">Yes</option>  
+                                                    <option value="0" selected>No</option>
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="is_trending" class="control-label mb-1">Is Trending</label>
+                                            <select  id="is_trending" value="{{ $is_trending }}" name="is_trending" class="form-control" aria-required="true" aria-invalid="false" required>
+                                                @if ($is_trending=='1')
+                                                    <option value="1" selected>Yes</option>  
+                                                    <option value="0">No</option>
+                                                @else
+                                                    <option value="1">Yes</option>  
+                                                    <option value="0" selected>No</option>
+                                                @endif
+                                            </select>
+                                            
+                                        </div>
+                                    </div>
+                              </div>
                             
                                 <input type="hidden" name="id" value="{{ $id }}">
                             </div>
@@ -155,7 +234,7 @@
                                                 <input id="price" name="price[]" type="text" value="{{ $pAArr['price'] }}" class="form-control" aria-required="true" aria-invalid="false" required>        
                                             </div>
                                             <div class="col-3">
-                                                <label for="size_id" class="control-label mb-1">Price</label>
+                                                <label for="size_id" class="control-label mb-1">Size</label>
                                                 <select  id="size_id" name="size_id[]" class="form-control" aria-required="true" aria-invalid="false" >
                                                     <option value="">Select</option>
                                                     @foreach ($size as $item)
@@ -186,7 +265,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <label for="attr_image" class="control-label mb-1">Image</label>
-                                                <input id="attr_image" name="attr_image[]" type="file" class="form-control" aria-required="true" aria-invalid="false" required> 
+                                                <input id="attr_image" name="attr_image[]" type="file" class="form-control" aria-required="true" aria-invalid="false" {{ $image_required }}> 
                                                 @if ( $pAArr['attr_image']!='')
                                                     <img width="100px" src="{{ asset('storage/media/'.$pAArr['attr_image']) }}" alt=""></td>
                                                 @endif                                             
@@ -228,7 +307,7 @@
                                                 <input id="piid" name="piid[]" type="hidden" value="{{ $pIArr['id'] }}"> 
                                             <div class="col-4 product_images_{{ $loop_count_num++ }}" >
                                                 <label for="images" class="control-label mb-1">Image</label>
-                                                <input id="images" name="images[]" type="file" class="form-control" aria-required="true" aria-invalid="false" required> 
+                                                <input id="images" name="images[]" type="file" class="form-control" aria-required="true" aria-invalid="false" {{ $image_required }}> 
                                                 @if ( $pIArr['images']!='')
                                                     <a href="{{ asset('storage/media/'.$pIArr['images']) }}" target="_blank"><img width="100px" src="{{ asset('storage/media/'.$pIArr['images']) }}" alt=""></a>
                                                 @endif                                             
@@ -348,5 +427,9 @@
         function remove_image_more(loop_image_count){
             jQuery('.product_images_'+loop_image_count).remove();
         }
+
+        CKEDITOR.replace('short_desc')
+        CKEDITOR.replace('desc')
+        CKEDITOR.replace('technical_specification')
     </script>
 @endsection
