@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Brand;
+use App\Http\Controllers\Controller;
+use App\Models\Admin\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Storage;
@@ -29,11 +30,18 @@ class BrandController extends Controller
             $result=Brand::find($id);
             $data['name']=$result->name;
             $data['image']=$result->image;
+            $data['is_home']=$result->is_home;
+            $data['is_home_selected']="";
+            if($result->is_home==1){
+                $data['is_home_selected']="checked";
+            }
             $data['status']=$result->staus;
             $data['id']=$id;
         }else{
             $data['name']='';
             $data['image']='';
+            $data['is_home']="";
+            $data['is_home_selected']="";
             $data['status']='';
             $data['id']=0;
         }
@@ -72,6 +80,10 @@ class BrandController extends Controller
         }
 
         $model->name=$request->name;
+        $model->is_home=0;
+        if($request->is_home!==null){
+            $model->is_home=1;
+        }
         $model->status=1;
         $model->save();
         $request->session()->flash('message',$msg);

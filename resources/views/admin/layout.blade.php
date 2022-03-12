@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('page_title')</title>
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('admin_assets/css/font-face.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin_assets/vendor/font-awesome-4.7/css/font-awesome.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin_assets/vendor/font-awesome-5/css/fontawesome-all.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin_assets/vendor/mdi-font/css/material-design-iconic-font.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin_assets/vendor/bootstrap-4.1/bootstrap.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin_assets/css/theme.css') }}" rel="stylesheet" media="all">
-
 </head>
 
 <body>
@@ -82,15 +81,19 @@
                         </li>
                         <li class="@yield('brand_select')">
                             <a href="{{ url('admin/brand') }}">
-                                <i class="fas fa-product-hunt"></i>Brand</a>
+                                <i class="fa fa-bookmark"></i>Brand</a>
                         </li>
                         <li class="@yield('product_select')">
                             <a href="{{ url('admin/product') }}">
-                                <i class="fas fa-product-hunt"></i>Product</a>
+                                <i class="fa fa-flag"></i>Product</a>
                         </li>
                         <li class="@yield('tax_select')">
                             <a href="{{ url('admin/tax') }}">
-                                <i class="fas fa-product-hunt"></i>Tax</a>
+                                <i class="fa fa-percent"></i>Tax</a>
+                        </li>
+                        <li class="@yield('customer_select')">
+                            <a href="{{ url('admin/customer') }}">
+                                <i class="fa fa-user"></i>Customer</a>
                         </li>
                     </ul>
                 </nav>

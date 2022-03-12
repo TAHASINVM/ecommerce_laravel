@@ -3,11 +3,7 @@
 @section('brand_select','active')
 @section('container')
 
-    @if ($id>0)
-    {{ $image_required="" }}
-    @else
-    {{ $image_required="required" }}
-    @endif
+
 
     @error('image')
         <div class="alert alert-danger" role="alert">
@@ -35,7 +31,7 @@
                         </div>
                         <div class="form-group">
                             <label for="image" class="control-label mb-1">Image</label>
-                            <input id="image" value="{{ $image }}" name="image" type="file" class="form-control" aria-required="true" aria-invalid="false" {{ $image_required }}>
+                            <input id="image" value="{{ $image }}" name="image" type="file" class="form-control" aria-required="true" aria-invalid="false">
                             @if ($image!="")
                                 <img width="100px" src="{{ asset('storage/media/brand/'.$image) }}" alt="">
                             @endif
@@ -44,6 +40,10 @@
                                     {{ $message }}
                                 </div>
                             @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="is_home" class="control-label mb-1">Show In Home Page</label>
+                            <input id="is_home"  name="is_home" type="checkbox" {{ $is_home_selected }}>
                         </div>
                         <div>
                             <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">

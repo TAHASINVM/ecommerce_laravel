@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
+use App\Http\Controllers\Controller;
+use App\Models\Admin\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Storage;
@@ -33,6 +34,12 @@ class CategoryController extends Controller
             $data['category_slug']=$result->category_slug;
             $data['parent_category_id']=$result->parent_category_id;
             $data['category_image']=$result->category_image;
+
+            $data['is_home']=$result->is_home;
+            $data['is_home_selected']="";
+            if($result->is_home==1){
+                $data['is_home_selected']="checked";
+            }
             $data['id']=$id;
             $data['category']=DB::table('categories')->where(['status'=>1])->where('id','!=',$id)->get();
 
@@ -41,6 +48,8 @@ class CategoryController extends Controller
             $data['category_slug']='';
             $data['parent_category_id']="";
             $data['category_image']="";
+            $data['is_home']="";
+            $data['is_home_selected']="";
             $data['id']=0;
             $data['category']=DB::table('categories')->where(['status'=>1])->get();
 
@@ -66,9 +75,12 @@ class CategoryController extends Controller
         $model->category_name=$request->category_name;
         $model->category_slug=$request->category_slug;
         $model->parent_category_id=$request->parent_category_id;
+        $model->is_home=0;
+        if($request->is_home!==null){
+            $model->is_home=1;
+        }
 
         if($request->hasfile('category_image')){
-
             if($request->id > 0){
                 $arrImage=DB::table('categories')->where(['id'=>$request->id])->get();
                 if( Storage::exists('/public/media/category/'.$arrImage[0]->category_image)){

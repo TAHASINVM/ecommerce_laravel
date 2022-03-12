@@ -28,7 +28,7 @@
                                 <div class="col-md-4">
                                     <label for="parent_category_id" class="control-label mb-1">Parent Category</label>
                                     <select  id="parent_category_id" value="{{ $parent_category_id }}" name="parent_category_id" class="form-control" aria-required="true" aria-invalid="false" required>
-                                        <option value="">Select Categories</option>
+                                        <option value="0">Select Categories</option>
                                         @foreach ($category as $item)
                                             @if ($parent_category_id==$item->id)
                                                 <option selected value="{{ $item->id }}"> 
@@ -52,6 +52,10 @@
                                     {{ $message }}
                                 </div>
                             @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="is_home" class="control-label mb-1">Show In Home Page</label>
+                            <input id="is_home"  name="is_home" type="checkbox" {{ $is_home_selected }}>
                         </div>
                         <div>
                             <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">

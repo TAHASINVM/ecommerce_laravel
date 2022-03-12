@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Product;
+use App\Http\Controllers\Controller;
+use App\Models\Admin\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Storage;
@@ -187,6 +188,7 @@ class ProductController extends Controller
 
 
         foreach($skuArr as $key=>$val){
+            $productAttrArr=[];
             $productAttrArr['product_id']=$pdi;
             $productAttrArr['sku']=$skuArr[$key];
             $productAttrArr['mrp']=(int)$mrpArr[$key];
