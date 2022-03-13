@@ -95,6 +95,10 @@
                             <a href="{{ url('admin/customer') }}">
                                 <i class="fa fa-user"></i>Customer</a>
                         </li>
+                        <li class="@yield('home_banner_select')">
+                            <a href="{{ url('admin/home_banner') }}">
+                                <i class="fa fa-images"></i>Home Banner</a>
+                        </li>
                     </ul>
                 </nav>
             </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\HomeBannerController;
 
 use App\Http\Controllers\Front\FrontController;
 /*
@@ -25,6 +26,7 @@ use App\Http\Controllers\Front\FrontController;
 */
 
 Route::get('/',[FrontController::class,'index']);
+Route::get('/product/{id}',[FrontController::class,'product']);
 
 
 Route::get('admin',[AdminController::class,'index']);
@@ -88,6 +90,13 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::get('admin/customer',[CustomerController::class,'index']);
     Route::get('admin/customer/status/{status}/{id}',[CustomerController::class,'status']);
     Route::get('admin/customer/show/{id}',[CustomerController::class,'show']);
+
+    Route::get('admin/home_banner',[HomeBannerController::class,'index']);
+    Route::get('admin/home_banner/manage_home_banner',[HomeBannerController::class,'manage_home_banner']);
+    Route::post('admin/home_banner/manage_home_banner_process',[HomeBannerController::class,'manage_home_banner_process'])->name('home_banner.manage_home_banner_process');
+    Route::get('admin/home_banner/delete/{id}',[HomeBannerController::class,'delete']);
+    Route::get('admin/home_banner/status/{status}/{id}',[HomeBannerController::class,'status']);
+    Route::get('admin/home_banner/manage_home_banner/{id}',[HomeBannerController::class,'manage_home_banner']);
 
 
 
