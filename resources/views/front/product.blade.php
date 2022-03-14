@@ -62,30 +62,40 @@
                      @endif
                    </div>
                    <p>{!! $product[0]->short_desc !!}</p>
-                   <h4>Size</h4>
-                   <div class="aa-prod-view-size">
-                      @php
-                        $arrSize=[];
-                        foreach ($product_attr[$product[0]->id] as $item){
-                          $arrSize[]=$item->size;
-                        }
-                        $arrSize=array_unique($arrSize);
-                      @endphp
-                      @foreach ($arrSize as $item)
-                        @if ($item!="")
-                          <a href="javascript:void(0)" class="size_link" id="size_{{ $item }}" onclick="showColor('{{ $item }}')">{{ $item }}</a>  
-                        @endif
-                      @endforeach                     
-                   </div>
-                   <h4>Color</h4>
-                   <div class="aa-color-tag">
-                     @foreach ($product_attr[$product[0]->id] as $item)
-                      @if ($item->color!="")
-                        <a href="javascript:void(0)"  class="aa-color-{{ strToLower($item->color) }} product_color size_{{ $item->size }}" onclick=change_product_color_image("{{ asset('storage/media/'.$item->attr_image) }}","{{ $item->color }}")></a>      
-                      @endif
-                     @endforeach
+                   @if ($product_attr[$product[0]->id][0]->size_id>0)
+
+                    <h4>Size</h4>
+                    <div class="aa-prod-view-size">
+                        @php
+                          $arrSize=[];
+                          foreach ($product_attr[$product[0]->id] as $item){
+                            $arrSize[]=$item->size;
+                          }
+                          $arrSize=array_unique($arrSize);
+                        @endphp
+                        @foreach ($arrSize as $item)
+                          @if ($item!="")
+                            <a href="javascript:void(0)" class="size_link" id="size_{{ $item }}" onclick="showColor('{{ $item }}')">{{ $item }}</a>  
+                          @endif
+                        @endforeach                     
+                    </div>
+                  @endif
+
+                   @if ($product_attr[$product[0]->id][0]->color_id>0)
                      
-                   </div>
+                      <h4>Color</h4>
+                      <div class="aa-color-tag">
+                        @foreach ($product_attr[$product[0]->id] as $item)
+                          @if ($item->color!="")
+                            <a href="javascript:void(0)"  class="aa-color-{{ strToLower($item->color) }} product_color size_{{ $item->size }}" onclick=change_product_color_image("{{ asset('storage/media/'.$item->attr_image) }}","{{ $item->color }}")></a>      
+                          @endif
+                        @endforeach
+                      </div>
+                    
+                   @endif 
+
+
+                   
                    <div class="aa-prod-quantity">
                      <form action="">
                        <select id="qty" name="qty">
@@ -99,7 +109,7 @@
                      </p>
                    </div>
                    <div class="aa-prod-view-bottom">
-                     <a class="aa-add-to-cart-btn" href="javascript:void(0)" onclick="add_to_cart({{ $product[0]->id }})">Add To Cart</a>
+                     <a class="aa-add-to-cart-btn" href="javascript:void(0)" onclick="add_to_cart({{ $product[0]->id }},{{ $product_attr[$product[0]->id][0]->size_id }},{{ $product_attr[$product[0]->id][0]->color_id }})">Add To Cart</a>
                      <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
                      <a class="aa-add-to-cart-btn" href="#">Compare</a>
                    </div>

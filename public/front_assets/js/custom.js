@@ -373,18 +373,24 @@ function showColor(size){
   jQuery('#size_'+size).css('border','1px solid black')
 }
 
-function add_to_cart(id){
+function add_to_cart(id,si,ci){
   jQuery('#add_to_cart_msg').html('')
   var color_id=jQuery('#color_id').val()
   var size_id=jQuery('#size_id').val()
-  if(size_id==""){
+
+  if(si==0 && size_id==0){
+    size_id='no'
+    color_id='no'
+  }
+
+  if(size_id=="" && size_id!='no'){
     jQuery('#add_to_cart_msg').html(`
       <div class="alert alert-danger mt-5 fade in alert-dismissable">
         <a href="#" class="close " data-dismiss="alert" title="close">x</a>
         Plaese Select Size
       </div>
     `)
-  }else if(color_id==""){
+  }else if(color_id=="" && color_id!='no'){
     jQuery('#add_to_cart_msg').html(`
     <div class="alert alert-danger mt-3 fade in alert-dismissable">
         <a href="#" class="close " data-dismiss="alert" title="close">x</a>
