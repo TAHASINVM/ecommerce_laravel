@@ -100,6 +100,12 @@ class FrontController extends Controller
                 ->get();
         } 
 
+        foreach($result['product'] as $item1){
+            $result['product_images'][$item1->id]=DB::table('product_images')
+            ->where(['product_id' => $item1->id])
+            ->get();
+        } 
+
         $result['related_product']=DB::table('products')
                 ->where(['status'=>1])
                 ->where('slug','!=',$slug)
@@ -114,5 +120,55 @@ class FrontController extends Controller
         } 
         // prx($result);
         return view('front.product',$result);
+    }
+
+    public function add_to_cart(Request $request){
+        if($request->session()->has('FRONT_USER_LOGIN')){
+            $uid=$request->session()->get('FRONT_USER_LOGIN');
+            $user_type="Reg";
+        }else{
+            $uid=getUserTempId();
+            $user_type="Not-Reg"; 
+        }
+        $size_id=$request->size_id;
+        $color_id=$request->color_id;
+        $pqty=$request->pqty;
+        $product_id=$request->product_id;
+
+        $result=DB::table('product_attr')
+                ->select('product_attr.id')
+                ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+                ->leftJoin('colors','colors.id','=','product_attr.color_id')
+                ->where(['product_id'=> $product_id])
+                ->where(['sizes.size'=> $size_id])
+                ->where(['colors.color'=> $color_id])
+                ->get();
+
+        $product_attr_id=$result[0]->id;
+
+        $check=DB::table('cart')
+                ->where(['user_id'=>$uid])
+                ->where(['user_type'=>$user_type])
+                ->where(['product_id'=>$product_id])
+                ->where(['product_attr_id'=>$product_attr_id])
+                ->get();
+        if(isset($check[0])){
+            $update_id=$check[0]->id;
+            DB::table('cart')
+                ->where(['id'=>$update_id])
+                ->update(['qty'=>$pqty]);
+            $msg="UPDATED";
+        }else{
+            $id=DB::table('cart')->insertGetId([
+                'user_id'=>$uid,
+                'user_type'=>$user_type,
+                'product_id'=>$product_id,
+                'product_attr_id'=>$product_attr_id,
+                'qty'=>$pqty,
+                'added_on'=>date('Y-m-d h:i:s')
+            ]);
+            $msg="ADDED";
+        }
+        return response()->json(['msg'=>$msg]);
     }
 }
