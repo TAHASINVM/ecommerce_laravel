@@ -412,6 +412,36 @@ function add_to_cart(id,si,ci){
       type:'post',
       success:function(result){
         alert('Product '+result.msg)
+        var totalPrice=0;
+        if(result.totalItem==0){
+          jQuery('.aa-cart-notify').html('0');
+          jQuery('.aa-cartbox-summary').remove();
+        }else{
+          jQuery('.aa-cart-notify').html(result.totalItem);
+          var html='<ul>';
+          jQuery.each(result.data,function(arrkey,arrval){
+              totalPrice=parseInt(totalPrice)+(parseInt(arrval.qty)*parseInt(arrval.price))
+              html+=` <li>
+                        <a class="aa-cartbox-img" href="#"><img src="${PRODUCT_IMAGE}/${arrval.image}" alt="img"></a>
+                        <div class="aa-cartbox-info">
+                          <h4><a href="#"></a>${arrval.name}</h4>
+                          <p>${arrval.qty} x $${arrval.price} </p>
+                        </div>
+                      </li>`
+          })
+          html+=` <li>
+                    <span class="aa-cartbox-total-title">
+                      Total
+                    </span>
+                    <span class="aa-cartbox-total-price">
+                      $ ${totalPrice}
+                    </span>
+                  </li>
+                </ul>
+                <a class="aa-cartbox-checkout aa-primary-btn" href="checkout">Checkout</a>
+              `;
+          jQuery('.aa-cartbox-summary').html(html)
+        }
       }
     })
   }

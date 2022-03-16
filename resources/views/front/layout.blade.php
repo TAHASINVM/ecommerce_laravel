@@ -28,6 +28,9 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   
+    <script>
+      var  PRODUCT_IMAGE="{{ asset('storage/media/') }}";
+    </script>
 
   </head>
   <body> 
@@ -129,13 +132,13 @@
                  $totalPrice=0;
                @endphp
               <div class="aa-cartbox">
-                <a class="aa-cart-link" href="#">
+                <a class="aa-cart-link" href="#" id="cartBox">
                   <span class="fa fa-shopping-basket"></span>
                   <span class="aa-cart-title">SHOPPING CART</span>
                   <span class="aa-cart-notify">{{ $totalCartItem }}</span>
                 </a>
-                @if ($totalCartItem>0)
-                  <div class="aa-cartbox-summary">
+                <div class="aa-cartbox-summary">
+                  @if ($totalCartItem>0)
                     <ul>
                       @foreach ($getAddToCartTotalItem as $item)
                       @php
@@ -159,8 +162,8 @@
                       </li>
                     </ul>
                     <a class="aa-cartbox-checkout aa-primary-btn" href="{{ url('/checkout') }}">Checkout</a>
-                  </div>
-                @endif
+                  @endif
+                </div>
              
               </div>
               <!-- / cart box -->

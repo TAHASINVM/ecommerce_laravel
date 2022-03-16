@@ -177,7 +177,17 @@ class FrontController extends Controller
             ]);
             $msg="ADDED";
         }
-        return response()->json(['msg'=>$msg]);
+        $result=DB::table('cart')
+                ->leftJoin('products','products.id','=','cart.product_id')
+                ->leftJoin('product_attr','product_attr.id','=','cart.product_attr_id')
+                ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+                ->leftJoin('colors','colors.id','=','product_attr.color_id')
+                ->where(['user_id'=>$uid])
+                ->where(['user_type'=>$user_type])
+                ->select('cart.qty','products.name','products.image','sizes.size','colors.color',
+                        'product_attr.price','products.slug','products.id as pid','product_attr.id as attr_id')
+                ->get();
+        return response()->json(['msg'=>$msg,'data'=>$result,'totalItem'=>count($result)]);
     }
 
 
