@@ -373,6 +373,12 @@ function showColor(size){
   jQuery('#size_'+size).css('border','1px solid black')
 }
 
+function home_add_to_cart(id,si,ci){
+  jQuery('#size_id').val(si)
+  jQuery('#color_id').val(ci)
+  add_to_cart(id,si,ci);
+}
+
 function add_to_cart(id,si,ci){
   jQuery('#add_to_cart_msg').html('')
   var color_id=jQuery('#color_id').val()
@@ -410,5 +416,23 @@ function add_to_cart(id,si,ci){
     })
   }
 
+}
+
+
+function updateQty(pid,size,color,atrr_id,price){
+  jQuery('#size_id').val(size)
+  jQuery('#color_id').val(color)
+  var qty=jQuery('#qty'+atrr_id).val();
+  jQuery('#qty').val(qty);
+  add_to_cart(pid,size,color)
+  jQuery('#total_price_'+atrr_id).html('$'+(qty*price));
+}
+
+function deleteCartProduct(pid,size,color,atrr_id){
+  jQuery('#size_id').val(size)
+  jQuery('#color_id').val(color)
+  jQuery('#qty').val(0);
+  add_to_cart(pid,size,color)
+  jQuery('#cart_box_'+atrr_id).remove();
 }
 
