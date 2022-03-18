@@ -30,6 +30,8 @@ Route::get('/category/{slug}',[FrontController::class,'category']);
 Route::get('/product/{id}',[FrontController::class,'product']);
 Route::post('add_to_cart',[FrontController::class,'add_to_cart']);
 Route::get('cart',[FrontController::class,'cart']);
+Route::get('/search/{str}',[FrontController::class,'search']);
+
 
 
 Route::get('admin',[AdminController::class,'index']);
