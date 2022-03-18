@@ -118,7 +118,6 @@ class FrontController extends Controller
                 ->where(['product_attr.product_id' => $item1->id])
                 ->get();
         } 
-        // prx($result);
         return view('front.product',$result);
     }
 
@@ -212,5 +211,81 @@ class FrontController extends Controller
                 ->get();
         // prx($check);
         return view('front.cart',$result);
+    }
+
+
+    public function category(Request $request , $slug){
+        $sort="";
+        $sort_txt="";
+        $filter_price_start="";
+        $filter_price_end="";
+        $color_filter="";
+        $colorFilterArr=[];
+        if($request->sort!=null){
+            $sort=$request->sort;
+        }
+        $query=DB::table('products');
+        $query=$query->leftJoin('categories','categories.id','=','products.category_id');
+        $query=$query->leftJoin('product_attr','product_attr.product_id','=','products.id');
+        $query=$query->where(['products.status'=>1]);
+        $query=$query->where(['categories.category_slug'=>$slug]);
+        if($sort=='name'){
+            $query=$query->orderBy('products.name','asc');
+            $sort_txt="Name";
+        }
+        if($sort=='date'){
+            $query=$query->orderBy('products.id','desc');
+            $sort_txt="Date";
+        }
+        // if($sort=='price_desc'){
+        //     $query=$query->orderBy('product_attr.price','desc');
+        //     $sort_txt="Price - Des";
+        // }
+        // if($sort=='price_asc'){
+        //     $query=$query->orderBy('product_attr.price','asc');
+        //     $sort_txt="Price - Asc";
+        // }
+        if($request->filter_price_start!=null && $request->filter_price_end!=null){
+            $filter_price_start=$request->filter_price_start;
+            $filter_price_end=$request->filter_price_end;
+            if($filter_price_start>0 && $filter_price_end>0){
+                $query=$query->whereBetween('product_attr.price',[$filter_price_start,$filter_price_end]);
+            }
+        }
+        if($request->color_filter!=null){
+            $color_filter=$request->color_filter;
+            $colorFilterArr=explode(':',$color_filter);
+            $colorFilterArr=array_filter($colorFilterArr);
+            $query=$query->where(['product_attr.color_id' => $request->color_filter]);
+        }
+        $query=$query->select('products.*');
+        $query=$query->get();
+        $result['product']=$query;
+        foreach($result['product'] as $item1){
+                $query=DB::table('product_attr');
+                $query=$query->leftJoin('sizes','sizes.id','=','product_attr.size_id');
+                $query=$query->leftJoin('colors','colors.id','=','product_attr.color_id');
+                $query=$query->where(['product_attr.product_id' => $item1->id]);
+                $query=$query->get();
+                $result['product_attr'][$item1->id]=$query;
+        }
+
+        $result['colors']=DB::table('colors')
+                ->where(['status'=>1])
+                ->get();
+
+        $result['categories_left']=DB::table('categories')
+                ->where(['status'=>1])
+                ->where(['is_home'=>1])
+                ->get();
+
+        $result['slug']=$slug;
+        $result['sort']=$sort;
+        $result['sort_txt']=$sort_txt;
+        $result['filter_price_start']=$filter_price_start;
+        $result['filter_price_end']=$filter_price_end;
+        $result['color_filter']=$color_filter;
+        $result['colorFilterArr']=$colorFilterArr;
+        return view('front.category',$result);
     }
 }

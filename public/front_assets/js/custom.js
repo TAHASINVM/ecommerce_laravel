@@ -240,23 +240,30 @@ jQuery(function($){
     jQuery(function(){
       if($('body').is('.productPage')){
        var skipSlider = document.getElementById('skipstep');
+       var filter_price_start=jQuery('#filter_price_start').val();
+       var filter_price_end=jQuery('#filter_price_end').val();
+
+       if(filter_price_start=="" || filter_price_end==''){
+        var filter_price_start=100;
+        var filter_price_end=1700;
+       }
         noUiSlider.create(skipSlider, {
             range: {
                 'min': 0,
-                '10%': 10,
-                '20%': 20,
-                '30%': 30,
-                '40%': 40,
-                '50%': 50,
-                '60%': 60,
-                '70%': 70,
-                '80%': 80,
-                '90%': 90,
-                'max': 100
+                '10%': 100,
+                '20%': 300,
+                '30%': 500,
+                '40%': 700,
+                '50%': 900,
+                '60%': 1100,
+                '70%': 1300,
+                '80%': 1500,
+                '90%': 1700,
+                'max': 1900
             },
             snap: true,
             connect: true,
-            start: [20, 70]
+            start: [filter_price_start, filter_price_end]
         });
         // for value print
         var skipValues = [
@@ -464,5 +471,29 @@ function deleteCartProduct(pid,size,color,atrr_id){
   jQuery('#qty').val(0);
   add_to_cart(pid,size,color)
   jQuery('#cart_box_'+atrr_id).remove();
+}
+
+
+function sort_by(){
+  var sort_by_value=jQuery('#sort_by_value').val();
+  jQuery('#sort').val(sort_by_value);
+  jQuery('#categoryfilter').submit();
+}
+
+function sort_price_filter(){
+  jQuery('#filter_price_start').val(jQuery('#skip-value-lower').html());
+  jQuery('#filter_price_end').val(jQuery('#skip-value-upper').html())
+  jQuery('#categoryfilter').submit();
+}
+
+function setColor(color,type){
+  var color_str=jQuery('#color_filter').val()
+  if(type==1){
+    var new_color_str=color_str.replace(color+':','');
+    jQuery('#color_filter').val(new_color_str);
+  }else{
+    jQuery('#color_filter').val(color+':'+color_str);
+  }
+  jQuery('#categoryfilter').submit();
 }
 
