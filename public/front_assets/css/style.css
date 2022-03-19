@@ -2604,7 +2604,8 @@ img {
 /*---- Login form ----*/
 
 .aa-login-form input[type="text"],
-.aa-login-form input[type="password"] {
+.aa-login-form input[type="password"],
+.aa-login-form input[type="email"]  {
   border: 1px solid #ccc;
   font-size: 16px;
   height: 40px;
@@ -4192,5 +4193,15 @@ img {
 }
 .left_cat_active{
   color:#ff6666;
+}
+
+.field_error{
+  color:red;
+  margin-top: -15px;
+}
+
+#login_msg{
+  color:red;
+  clear:both;
 }
 

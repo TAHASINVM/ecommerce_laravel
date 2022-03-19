@@ -32,6 +32,18 @@ Route::post('add_to_cart',[FrontController::class,'add_to_cart']);
 Route::get('cart',[FrontController::class,'cart']);
 Route::get('/search/{str}',[FrontController::class,'search']);
 
+Route::get('registration',[FrontController::class,'registration']);
+Route::post('registration_process',[FrontController::class,'registration_process'])->name('registration.registration_process');
+Route::post('login_process',[FrontController::class,'login_process'])->name('login.login_process');
+Route::get('logout', function () {
+    session()->forget('FRONT_USER_LOGIN');
+    session()->forget('FRONT_USER_ID');
+    session()->forget('FRONT_USER_NAME');
+    return redirect('/');
+});
+
+
+
 
 
 Route::get('admin',[AdminController::class,'index']);
