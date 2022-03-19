@@ -1,4 +1,4 @@
-@extends('front.layout');
+@extends('front.layout')
 @section('page_title','Home Page')
 @section('container')
 

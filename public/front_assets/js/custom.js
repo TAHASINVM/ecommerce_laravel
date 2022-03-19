@@ -543,3 +543,9 @@ jQuery('#frmLogin').submit(function(e){
   })
 })
 
+
+function forgot_password(){
+  jQuery('#popup_login').hide()
+  jQuery('#popup_forgot').show()
+}
+
